@@ -5,48 +5,37 @@
 #                                                     +:+ +:+         +:+      #
 #    By: liulm <liulm@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2025/03/18 14:01:26 by liulm             #+#    #+#              #
-#    Updated: 2025/04/04 16:16:17 by liulm            ###   ########.fr        #
+#    Created: 2024/11/04 12:02:13 by liulm             #+#    #+#              #
+#    Updated: 2024/11/04 14:58:41 by liulm            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	= philosophers
+NAME	= libftprintf.a
 
 CC		= cc
 
-CFLAGS	= -Wall -Wextra -Werror -g3
+FLAGS	= -Wall -Wextra -Werror
 
-RM		= rm -f
+RM		= rm -rf
 
-SRCS	=	srcs/main.c			\
-			srcs/initialize.c	\
+SRCS	=	ft_hex.c			\
+			ft_printf.c			\
+			ft_put_chars.c		\
+			ft_put_numbers.c
 
-OBJS	= $(SRCS:.c=.o)
+OBJS	= ${SRCS:.c=.o}
 
-LIBFT	= utils/libft/libft.a
+all: ${NAME}
 
-PRINTF	= utils/printf/libftprintf.a
-
-all: $(NAME)
-
-$(NAME): $(OBJS) $(LIBFT) $(PRINTF)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(PRINTF) -o $(NAME)
-
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
-$(LIBFT):
-	$(MAKE) -C utils/libft
-
-$(PRINTF):
-	$(MAKE) -C utils/printf
+${NAME}:	${OBJS}
+	@ar rcs ${NAME} ${OBJS}
 
 clean:
-	$(RM) $(OBJS)
+	rm -f ${OBJS}
 
-fclean: clean
-	$(RM) $(NAME)
+fclean:	clean
+	rm -f ${NAME}
 
-re: fclean all
+re:	fclean all
 
 .PHONY: all clean fclean re
