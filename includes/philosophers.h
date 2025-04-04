@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 14:04:27 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/04 16:24:47 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/04 16:34:52 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,7 @@ typedef struct s_philo
 	pthread_mutex_t	mutex_print;
 	pthread_mutex_t	mutex_eat;
 }	t_philo;
+
+int	initialize_philo(char **argv);;
 
 #endif

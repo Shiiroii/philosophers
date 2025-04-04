@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 14:01:38 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/04 16:29:18 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/04 16:42:31 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 int	main(int argc, char **argv)
 {
+	ft_printf("Philosophers\n");
 	if (argc >= 5 && argc <= 6)
 	{
-		initialize_philo(argv[1]);
+		initialize_philo(&argv[1]);
 		if (initialize_philo(argv) == 1)
 		{
 			write(1, "Error: Initialization failed\n", 30);
