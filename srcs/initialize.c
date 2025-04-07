@@ -6,11 +6,44 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:06:31 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/04 16:26:50 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/07 17:23:11 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philosophers.h"
+
+void	*free_philo(t_philo *philo)
+{
+	if (philo->forks)
+		free(philo->forks);
+	if (philo->mutex_forks)
+		free(philo->mutex_forks);
+	pthread_mutex_destroy(&philo->mutex_print);
+	pthread_mutex_destroy(&philo->mutex_eat);
+	return (NULL);
+}
+
+int	checker(int argc, char **argv)
+{
+	int		i;
+	size_t	j;
+
+	i = 1;
+	j = 0;
+	while (i < argc)
+	{
+		if (!ft_isdigit(argv[i][j]))
+			return (1);
+		i++;
+	}
+	if (ft_atoi(argv[1]) > 200)
+	{
+		write(1, "Error: Number of philosophers is too high\n", 43);
+		return (1);
+	}
+	ft_printf("CHECKER WORKED");
+	return (0);
+}
 
 int	*initialize_forks(int nb_philo)
 {
@@ -26,14 +59,17 @@ int	*initialize_forks(int nb_philo)
 		forks[i] = 0;
 		i++;
 	}
+	ft_printf("FORKS WORKED");
 	return (forks);
 }
 
-int	initialize_philo(char **argv)
+int	initialize_philo(int argc, char **argv)
 {
 	t_philo	philo;
 	int		i;
 
+	if (checker(argc, argv) == 1)
+		return (1);
 	philo.nb_philo = ft_atoi(argv[1]);
 	philo.time_die = ft_atoi(argv[2]);
 	philo.time_eat = ft_atoi(argv[3]);
@@ -44,7 +80,10 @@ int	initialize_philo(char **argv)
 		philo.nb_of_eat = -1;
 	philo.forks = initialize_forks(philo.nb_philo);
 	if (!philo.forks)
+	{
+		free_philo(&philo);
 		return (1);
+	}
 	i = 0;
 	while (i < philo.nb_philo)
 	{
@@ -53,5 +92,28 @@ int	initialize_philo(char **argv)
 	}
 	pthread_mutex_init(&philo.mutex_print, NULL);
 	pthread_mutex_init(&philo.mutex_eat, NULL);
+	ft_printf("INIT WORKED");
 	return (0);
+}
+
+void *philosopher_routine(void *arg)
+{
+	t_philo *philo = (t_philo *)arg;
+
+	while (1)
+	{
+		printf("Philosopher %d is thinking\n", philo->id);
+		usleep(philo->time_sleep * 1000);
+
+		pthread_mutex_lock(&philo->mutex_forks[philo->id]);
+		pthread_mutex_lock(&philo->mutex_forks[(philo->id + 1) % philo->nb_philo]);
+		printf("Philosopher %d is eating\n", philo->id);
+		usleep(philo->time_eat * 1000);
+		pthread_mutex_unlock(&philo->mutex_forks[philo->id]);
+		pthread_mutex_unlock(&philo->mutex_forks[(philo->id + 1) % philo->nb_philo]);
+
+		printf("Philosopher %d is sleeping\n", philo->id);
+		usleep(philo->time_sleep * 1000);
+	}
+	return (NULL);
 }

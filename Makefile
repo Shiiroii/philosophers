@@ -6,7 +6,7 @@
 #    By: liulm <liulm@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 14:01:26 by liulm             #+#    #+#              #
-#    Updated: 2025/04/04 16:40:35 by liulm            ###   ########.fr        #
+#    Updated: 2025/04/05 16:05:14 by liulm            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,9 +34,6 @@ all: $(NAME)
 $(NAME): $(OBJS) $(LIBFT) $(PRINTF)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(PRINTF) -o $(NAME)
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
-
 $(LIBFT):
 	$(MAKE) -C ./utils/libft
 
@@ -45,8 +42,8 @@ $(PRINTF):
 
 clean:
 	$(RM) $(OBJS)
-	$(MAKE) -C ./utils/libft clean
-	$(MAKE) -C ./utils/ft_printf clean
+	$(MAKE) -C ./utils/libft fclean
+	$(MAKE) -C ./utils/ft_printf fclean
 
 fclean: clean
 	$(RM) $(NAME)
