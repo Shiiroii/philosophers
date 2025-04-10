@@ -6,7 +6,7 @@
 #    By: liulm <liulm@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/03/18 14:01:26 by liulm             #+#    #+#              #
-#    Updated: 2025/04/08 17:38:28 by liulm            ###   ########.fr        #
+#    Updated: 2025/04/10 15:40:58 by liulm            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,8 +23,10 @@ RM		= rm -f
 SRCS	=	srcs/main.c				\
 			srcs/initialize.c		\
 			srcs/time_to_die.c		\
-			# srcs/time_to_sleep.c	\
-			# srcs/time_to_think.c	\
+			srcs/time_to_sleep.c	\
+			srcs/time_to_think.c	\
+			srcs/time_to_eat.c		\
+			srcs/routine.c			\
 
 OBJS	= $(SRCS:.c=.o)
 

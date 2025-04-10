@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:06:31 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/08 16:51:44 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/10 17:19:46 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	checker(int argc, char **argv)
 		write(1, "Error: Number of philosophers is too high\n", 43);
 		return (1);
 	}
-	ft_printf("CHECKER WORKED");
+	ft_printf("CHECKER WORKED\n");
 	return (0);
 }
 
@@ -59,19 +59,14 @@ int	*initialize_forks(int nb_philo)
 		forks[i] = 0;
 		i++;
 	}
-	ft_printf("FORKS WORKED");
+	ft_printf("FORKS WORKED\n");
 	return (forks);
 }
 
-
-int	initialize_philo(int argc, char **argv)
+void	mini_init(char **argv)
 {
 	t_philo	philo;
-	int		i;
 
-	ft_bzero(&philo, sizeof(t_philo));
-	if (checker(argc, argv) == 1)
-	return (1);
 	philo.nb_philo = ft_atoi(argv[1]);
 	philo.time_die = ft_atoi(argv[2]);
 	philo.time_eat = ft_atoi(argv[3]);
@@ -80,6 +75,17 @@ int	initialize_philo(int argc, char **argv)
 		philo.nb_of_eat = ft_atoi(argv[5]);
 	else
 		philo.nb_of_eat = -1;
+}
+
+int	initialize_philo(int argc, char **argv)
+{
+	t_philo	philo;
+	int		i;
+
+	ft_bzero(&philo, sizeof(t_philo));
+	if (checker(argc, argv) == 1)
+		return (1);
+	mini_init(argv);
 	philo.forks = initialize_forks(philo.nb_philo);
 	if (!philo.forks)
 	{
@@ -89,11 +95,11 @@ int	initialize_philo(int argc, char **argv)
 	i = 0;
 	while (i < philo.nb_philo)
 	{
-		pthread_mutex_init(&philo.mutex_forks, NULL);
+		pthread_mutex_init(philo.mutex_forks, NULL);
 		i++;
 	}
 	pthread_mutex_init(&philo.mutex_print, NULL);
 	pthread_mutex_init(&philo.mutex_eat, NULL);
-	ft_printf("INIT WORKED");
+	ft_printf("INIT WORKED\n");
 	return (0);
 }

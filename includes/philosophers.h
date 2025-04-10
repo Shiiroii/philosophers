@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 14:04:27 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/08 17:50:20 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/10 15:44:05 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,12 @@ typedef struct s_philo
 	int				nb_philo;
 	int				time_die;
 	int				time_eat;
+	int				last_eat;
 	int				time_sleep;
 	int				nb_of_eat;
 	int				*forks;
 	pthread_t		thread;
-	pthread_mutex_t	mutex_forks;
+	pthread_mutex_t	*mutex_forks;
 	pthread_mutex_t	mutex_print;
 	pthread_mutex_t	mutex_eat;
 	pthread_mutex_t	start_time;
@@ -41,5 +42,9 @@ typedef struct s_philo
 
 int	initialize_philo(int argc, char **argv);
 void *philosopher_routine(void *arg);
+int	time_to_think(t_philo *philo);
+int	time_to_die(t_philo *philo);
+int	time_to_eat(t_philo *philo, int i);
+int	time_to_sleep(t_philo *philo);
 
 #endif
