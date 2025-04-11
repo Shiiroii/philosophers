@@ -1,1 +1,84 @@
 valgrind --hellgrind pour mutex
+
+/
+
+//EXEMPLE TABELA POUR COORDONNEES
+enum e_axis
+{
+	NONE = -1
+	X, //0
+	Y, //1
+	Z, //2
+	NB_AXIS, //3
+};
+coord_player[NB_AXIS];
+//END
+
+//EXEMPLE TILES MAP
+enum e_tiles
+{
+	T_GROUND		= '0',
+	T_WALL			= '1',
+	T_COOLECTIBLE	= 'c',
+	T_EXIT			= 'E',
+	T_PLAYER		= 'P',
+};
+
+
+
+if (map[y][x] == T_WALL)
+{
+
+}
+//END
+
+
+//EXEMPLE PIPE
+enum e_pipes_io
+{
+	IN 	= 0,
+	OUT = 1,
+};
+
+
+int pipefd[2];
+
+pipe(pipefd);
+
+pipefd[IN] = "bonjour";
+write(pipefd[IN], "Bonjour", strlen("Bonjour"));
+read(pipefd[OUT], buffer, sizeof(buffer));
+//END
+
+
+
+
+
+
+
+
+//EXEMPLE SATRUCTURES IMBRIQUEES
+//les structures
+typedef struct s_chaussettes
+{
+	int chaussette_id;
+	int fraicheur
+} t_chaussettes;
+
+typedef strcut s_panier
+{
+	int		id;
+	t_chaussettes chaussettes;
+} t_panier;
+
+//la fonction
+func(t_mon_type *panier, t_mon_type *truc[])
+{
+
+		ptr_mt->id = 666;
+		(*ptr_mt).id = 666; //equivalent
+
+		panier->chaussettes.fraicheur
+
+}
+//END

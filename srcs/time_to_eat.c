@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 14:01:23 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/10 17:38:50 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/11 17:43:28 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,16 @@ int	time_to_eat(t_philo *philo, int i)
 	{
 		left_fork = &philo->mutex_forks[i];
 		right_fork = &philo->mutex_forks[(i + 1) % philo->nb_philo];
+		ft_printf("1\n");
 	}
 	else
 	{
 		left_fork = &philo->mutex_forks[(i + 1) % philo->nb_philo];
 		right_fork = &philo->mutex_forks[i];
+		ft_printf("2\n");
 	}
-	pthread_mutex_lock(left_fork);
 	pthread_mutex_lock(right_fork);
+	pthread_mutex_lock(left_fork);
 
 	pthread_mutex_lock(&philo->mutex_eat);
 

@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:06:31 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/10 17:19:46 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/11 17:24:12 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,6 +75,7 @@ void	mini_init(char **argv)
 		philo.nb_of_eat = ft_atoi(argv[5]);
 	else
 		philo.nb_of_eat = -1;
+	philo.id = 0;
 }
 
 int	initialize_philo(int argc, char **argv)
