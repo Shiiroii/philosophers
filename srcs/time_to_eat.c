@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 14:01:23 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/11 17:43:28 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/14 14:20:39 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,24 @@
 int	time_to_eat(t_philo *philo, int i)
 {
 	struct	timeval tv;
-	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*right_fork;
+	int		j = 1;
 
+	// pthread_mutex_lock(philo->mutex_forks);
 	if (philo->id % 2 == 0)
 	{
-		left_fork = &philo->mutex_forks[i];
-		right_fork = &philo->mutex_forks[(i + 1) % philo->nb_philo];
+		philo->left_fork = &philo[j].mutex_forks[i];
+		philo->right_fork = &philo[j + 1].mutex_forks[(i + 1) % philo->nb_philo];
 		ft_printf("1\n");
 	}
 	else
 	{
-		left_fork = &philo->mutex_forks[(i + 1) % philo->nb_philo];
-		right_fork = &philo->mutex_forks[i];
+		philo->left_fork = &philo[j].mutex_forks[(i + 1) % philo->nb_philo];
+		philo->right_fork = &philo[j + 1].mutex_forks[i];
 		ft_printf("2\n");
 	}
-	pthread_mutex_lock(right_fork);
-	pthread_mutex_lock(left_fork);
+	// pthread_mutex_unlock(philo->mutex_forks);
+	pthread_mutex_lock(philo->right_fork);
+	pthread_mutex_lock(philo->left_fork);
 
 	pthread_mutex_lock(&philo->mutex_eat);
 
@@ -48,7 +49,7 @@ int	time_to_eat(t_philo *philo, int i)
 
 	// pthread_mutex_unlock(&philo->mutex_forks[i]);
 	// pthread_mutex_unlock(&philo->mutex_forks[(i + 1) % philo->nb_philo]);
-	pthread_mutex_unlock(right_fork);
-	pthread_mutex_unlock(left_fork);
+	pthread_mutex_unlock(philo->right_fork);
+	pthread_mutex_unlock(philo->left_fork);
 	return (0);
 }
