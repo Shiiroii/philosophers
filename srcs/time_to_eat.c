@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 14:01:23 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/14 14:20:39 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/15 15:25:07 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,23 @@ int	time_to_eat(t_philo *philo, int i)
 		ft_printf("2\n");
 	}
 	// pthread_mutex_unlock(philo->mutex_forks);
-	pthread_mutex_lock(philo->right_fork);
-	pthread_mutex_lock(philo->left_fork);
+	// pthread_mutex_lock(philo->right_fork);
+	// pthread_mutex_lock(philo->left_fork);
 
-	pthread_mutex_lock(&philo->mutex_eat);
+	// pthread_mutex_lock(&philo->mutex_eat);
 
 	philo->last_eat = gettimeofday(&tv, NULL);
 
-	pthread_mutex_unlock(&philo->mutex_eat);
-	// pthread_mutex_lock(&philo->mutex_print);
+	// pthread_mutex_unlock(&philo->mutex_eat);
 
 	printf("Philosopher %d is eating\n", philo->id);
 
-	pthread_mutex_unlock(&philo->mutex_print);
 
 	usleep(philo->time_eat * 10);
 
 	// pthread_mutex_unlock(&philo->mutex_forks[i]);
 	// pthread_mutex_unlock(&philo->mutex_forks[(i + 1) % philo->nb_philo]);
-	pthread_mutex_unlock(philo->right_fork);
-	pthread_mutex_unlock(philo->left_fork);
+	// pthread_mutex_unlock(philo->right_fork);
+	// pthread_mutex_unlock(philo->left_fork);
 	return (0);
 }

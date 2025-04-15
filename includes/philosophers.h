@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 14:04:27 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/14 14:02:59 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/15 15:25:11 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef struct s_philo
 	pthread_mutex_t	*mutex_forks;
 	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	mutex_print;
 	pthread_mutex_t	mutex_eat;
 	pthread_mutex_t	start_time;
 }	t_philo;

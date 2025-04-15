@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:06:31 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/11 17:24:12 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/15 15:47:44 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ void	*free_philo(t_philo *philo)
 		free(philo->forks);
 	// if (philo->mutex_forks)
 	// 	free(philo->mutex_forks);
-	pthread_mutex_destroy(&philo->mutex_print);
 	pthread_mutex_destroy(&philo->mutex_eat);
 	return (NULL);
 }
@@ -99,7 +98,6 @@ int	initialize_philo(int argc, char **argv)
 		pthread_mutex_init(philo.mutex_forks, NULL);
 		i++;
 	}
-	pthread_mutex_init(&philo.mutex_print, NULL);
 	pthread_mutex_init(&philo.mutex_eat, NULL);
 	ft_printf("INIT WORKED\n");
 	return (0);

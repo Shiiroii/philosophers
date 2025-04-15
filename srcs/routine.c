@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/10 15:39:25 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/14 14:21:29 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/15 15:43:22 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void *philosopher_routine(void *arg)
 {
 	t_philo *philo = (t_philo *)arg;
+	struct timeval tv;
 	// int i = 1;
 
 	while (1)
@@ -32,10 +33,11 @@ void *philosopher_routine(void *arg)
 		time_to_think(philo);
 		usleep(philo->time_sleep * 10);
 		// ft_printf("Philosopher %d is sleeping\n", philo->id);
-		if (philo has eaten);
-		usleep(philo->time_sleep * 10);
-		else
+		// if (philo has eaten);
+		if (philo->last_eat + philo->time_die < gettimeofday(&tv, NULL))
 			time_to_die(philo);
+		else
+			time_to_sleep(philo);
 	}
 	return (NULL);
 }
