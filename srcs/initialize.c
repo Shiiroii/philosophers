@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:06:31 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/15 15:47:44 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/18 18:30:40 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,20 @@
 
 void	*free_philo(t_philo *philo)
 {
+	int	i;
+
+	i = 0;
 	if (philo->forks)
 		free(philo->forks);
-	// if (philo->mutex_forks)
-	// 	free(philo->mutex_forks);
+	if (philo->mutex_forks)
+	{
+		while (i < philo->nb_philo)
+		{
+			pthread_mutex_destroy(&philo->mutex_forks[i]);
+			i++;
+		}
+		free(philo->mutex_forks);
+	}
 	pthread_mutex_destroy(&philo->mutex_eat);
 	return (NULL);
 }
@@ -74,7 +84,6 @@ void	mini_init(char **argv)
 		philo.nb_of_eat = ft_atoi(argv[5]);
 	else
 		philo.nb_of_eat = -1;
-	philo.id = 0;
 }
 
 int	initialize_philo(int argc, char **argv)
@@ -86,8 +95,9 @@ int	initialize_philo(int argc, char **argv)
 	if (checker(argc, argv) == 1)
 		return (1);
 	mini_init(argv);
-	philo.forks = initialize_forks(philo.nb_philo);
-	if (!philo.forks)
+	philo.mutex_forks = malloc(sizeof(pthread_mutex_t) * philo.nb_philo);
+	// philo.forks = initialize_forks(philo.nb_philo);
+	if (!philo.mutex_forks)
 	{
 		free_philo(&philo);
 		return (1);
@@ -95,7 +105,7 @@ int	initialize_philo(int argc, char **argv)
 	i = 0;
 	while (i < philo.nb_philo)
 	{
-		pthread_mutex_init(philo.mutex_forks, NULL);
+		pthread_mutex_init(&philo.mutex_forks[i], NULL);
 		i++;
 	}
 	pthread_mutex_init(&philo.mutex_eat, NULL);

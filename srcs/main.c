@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 14:01:38 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/10 17:13:35 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/18 18:38:22 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,21 @@
 
 int	main(int argc, char **argv)
 {
+	int			id;
+	pthread_t	threads[ft_atoi(argv[1])];
+
+	id = ft_atoi(argv[1]);
 	if (argc >= 5 && argc <= 6)
 	{
-		if (initialize_philo(argc, &*argv) == 1)
+		if (initialize_philo(argc, argv) == 1)
 		{
 			write(1, "Error: Initialization failed\n", 30);
 			return (1);
 		}
-		philosopher_routine(argv);
+		while (id-- > 0)
+			pthread_create(&threads[id], NULL, philosopher_routine(id, argv), (void *)&id);
+		while (id++ < ft_atoi(argv[1]))
+			pthread_join(threads[id], NULL);
 	}
 	else
 		write (1, "Usage : ./philosophers nb_phil time_die time_eat time_sleep [nb_of_eat]", 71);
