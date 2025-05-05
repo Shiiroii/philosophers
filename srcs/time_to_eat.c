@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 14:01:23 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/27 15:39:42 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/28 15:10:13 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,21 +15,22 @@
 int	time_to_eat(t_philo *philo, int i, int id)
 {
 	// pthread_mutex_lock(philo->mutex_forks);
+	printf("number of philosophers = %d\n", philo->nb_philo);
 	if (id % 2 == 0)
 	{
 		philo->left_fork = &philo->mutex_forks[i];
 		philo->right_fork = &philo->mutex_forks[(i + 1) % philo->nb_philo];
-		ft_printf("1\n");
+		printf("1\n");
 	}
-	else if (id != 1)
+	else if (id != 0)
 	{
 		philo->left_fork = &philo->mutex_forks[(i + 1) % philo->nb_philo];
 		philo->right_fork = &philo->mutex_forks[i];
-		ft_printf("2\n");
+		printf("2\n");
 	}
 	printf("Philosopher %d: Left fork = %p, Right fork = %p\n", id, philo->left_fork, philo->right_fork);
 	pthread_mutex_lock(philo->right_fork);
-	pthread_mutex_lock(philo->left_fork);
+	// pthread_mutex_lock(philo->left_fork);
 
 	pthread_mutex_lock(&philo->mutex_eat);
 
@@ -43,6 +44,6 @@ int	time_to_eat(t_philo *philo, int i, int id)
 	usleep(philo->time_eat * 10);
 
 	pthread_mutex_unlock(philo->right_fork);
-	pthread_mutex_unlock(philo->left_fork);
+	// pthread_mutex_unlock(philo->left_fork);
 	return (0);
 }

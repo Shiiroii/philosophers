@@ -6,7 +6,7 @@
 /*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 16:06:31 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/18 18:30:40 by liulm            ###   ########.fr       */
+/*   Updated: 2025/04/28 14:28:58 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	checker(int argc, char **argv)
 		write(1, "Error: Number of philosophers is too high\n", 43);
 		return (1);
 	}
-	ft_printf("CHECKER WORKED\n");
+	printf("CHECKER WORKED\n");
 	return (0);
 }
 
@@ -68,25 +68,23 @@ int	*initialize_forks(int nb_philo)
 		forks[i] = 0;
 		i++;
 	}
-	ft_printf("FORKS WORKED\n");
+	printf("FORKS WORKED\n");
 	return (forks);
 }
 
-void	mini_init(char **argv)
+void	mini_init(t_philo *philo, char **argv)
 {
-	t_philo	philo;
-
-	philo.nb_philo = ft_atoi(argv[1]);
-	philo.time_die = ft_atoi(argv[2]);
-	philo.time_eat = ft_atoi(argv[3]);
-	philo.time_sleep = ft_atoi(argv[4]);
+	philo->nb_philo = ft_atoi(argv[1]);
+	philo->time_die = ft_atoi(argv[2]);
+	philo->time_eat = ft_atoi(argv[3]);
+	philo->time_sleep = ft_atoi(argv[4]);
 	if (argv[5])
-		philo.nb_of_eat = ft_atoi(argv[5]);
+		philo->nb_of_eat = ft_atoi(argv[5]);
 	else
-		philo.nb_of_eat = -1;
+		philo->nb_of_eat = -1;
 }
 
-int	initialize_philo(int argc, char **argv)
+int	initialize_philo(int argc, char **argv, t_philo **philo_ptr)
 {
 	t_philo	philo;
 	int		i;
@@ -94,7 +92,7 @@ int	initialize_philo(int argc, char **argv)
 	ft_bzero(&philo, sizeof(t_philo));
 	if (checker(argc, argv) == 1)
 		return (1);
-	mini_init(argv);
+	mini_init(&philo, argv);
 	philo.mutex_forks = malloc(sizeof(pthread_mutex_t) * philo.nb_philo);
 	// philo.forks = initialize_forks(philo.nb_philo);
 	if (!philo.mutex_forks)
@@ -109,6 +107,7 @@ int	initialize_philo(int argc, char **argv)
 		i++;
 	}
 	pthread_mutex_init(&philo.mutex_eat, NULL);
-	ft_printf("INIT WORKED\n");
+	printf("INIT WORKED\n");
+	*philo_ptr = &philo;
 	return (0);
 }
