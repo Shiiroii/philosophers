@@ -1,13 +1,13 @@
 /* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   initialize.c                                       :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/04 16:06:31 by liulm             #+#    #+#             */
-/*   Updated: 2025/04/28 14:28:58 by liulm            ###   ########.fr       */
-/*                                                                            */
+/*																			*/
+/*														:::	  ::::::::   */
+/*   initialize.c									   :+:	  :+:	:+:   */
+/*													+:+ +:+		 +:+	 */
+/*   By: liulm <liulm@student.42.fr>				+#+  +:+	   +#+		*/
+/*												+#+#+#+#+#+   +#+		   */
+/*   Created: 2025/04/04 16:06:31 by liulm			 #+#	#+#			 */
+/*   Updated: 2025/05/06 16:04:12 by liulm			###   ########.fr	   */
+/*																			*/
 /* ************************************************************************** */
 
 #include "../includes/philosophers.h"
@@ -86,28 +86,34 @@ void	mini_init(t_philo *philo, char **argv)
 
 int	initialize_philo(int argc, char **argv, t_philo **philo_ptr)
 {
-	t_philo	philo;
+	t_philo	*philo;
 	int		i;
 
-	ft_bzero(&philo, sizeof(t_philo));
-	if (checker(argc, argv) == 1)
+	philo = malloc(sizeof(t_philo));
+	if (philo == NULL)
 		return (1);
-	mini_init(&philo, argv);
-	philo.mutex_forks = malloc(sizeof(pthread_mutex_t) * philo.nb_philo);
-	// philo.forks = initialize_forks(philo.nb_philo);
-	if (!philo.mutex_forks)
+	ft_bzero(philo, sizeof(t_philo));
+	if (checker(argc, argv) == 1)
 	{
-		free_philo(&philo);
+		free(philo);
+		return (1);
+	}
+	mini_init(philo, argv);
+	philo->mutex_forks = malloc(sizeof(pthread_mutex_t) * philo->nb_philo);
+	// philo.forks = initialize_forks(philo.nb_philo);
+	if (!philo->mutex_forks)
+	{
+		free(philo);
 		return (1);
 	}
 	i = 0;
-	while (i < philo.nb_philo)
+	while (i < philo->nb_philo)
 	{
-		pthread_mutex_init(&philo.mutex_forks[i], NULL);
+		pthread_mutex_init(&philo->mutex_forks[i], NULL);
 		i++;
 	}
-	pthread_mutex_init(&philo.mutex_eat, NULL);
+	pthread_mutex_init(&philo->mutex_eat, NULL);
 	printf("INIT WORKED\n");
-	*philo_ptr = &philo;
+	*philo_ptr = philo;
 	return (0);
 }
