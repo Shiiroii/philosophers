@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialization.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lionelulm <lionelulm@student.42.fr>        +#+  +:+       +#+        */
+/*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:14:52 by lionelulm         #+#    #+#             */
-/*   Updated: 2025/05/07 22:59:21 by lionelulm        ###   ########.fr       */
+/*   Updated: 2025/05/08 15:41:09 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ void	init_philo(t_philo **philo, t_info *info)
 	int	i;
 
 	i = 0;
-	mutex_philo(&info->end, INIT);
-	mutex_philo(&info->print, INIT);
+	mutex_init_philo(&info->end);
+	mutex_init_philo(&info->print);
 	info->start = convert_time_milli();
 	while (i < info->nb_of_philo)
 	{
@@ -40,14 +40,14 @@ void	init_philo(t_philo **philo, t_info *info)
 		if (pthread_mutex_init(&((*philo)[i].lock_fork), NULL) != 0)
 		{
 			printf("Mutex initialization failed\n");
-			return;
+			return ;
 		}
 		i++;
 	}
 	i = 0;
 	while (i < info->nb_of_philo)
 	{
-		pthread_philo(&(*philo)[i], CREATE);
+		pthread_create_philo(&(*philo)[i]);
 		i++;
 	}
 }
@@ -66,12 +66,12 @@ int	checker(int argc, char **argv)
 			printf("Variables are not all numbers\n");
 			return (1);
 		}
-		if (ft_atoi(argv[argc]) <= 0)
+		else if (ft_atoi(argv[argc]) <= 0)
 		{
 			printf("Numbers cant be negative\n");
 			return (1);
 		}
-		if (ft_atoi(argv[argc]) > 2147483647)
+		else if (ft_atoi(argv[argc]) > 2147483647)
 		{
 			printf("Numbers are too high\n");
 			return (1);
@@ -88,6 +88,7 @@ void	mini_init(t_info *info, char **argv)
 	info->time_to_sleep = ft_atoi(argv[4]);
 	info->finish = 0;
 }
+
 int	init_variables(int argc, char **argv, t_philo **philo, t_info *info)
 {
 	if (checker(argc, argv) == 1)
@@ -96,9 +97,9 @@ int	init_variables(int argc, char **argv, t_philo **philo, t_info *info)
 		info->nb_of_rounds = ft_atoi(argv[5]);
 	else
 		info->nb_of_rounds = -1;
-	if (ft_atoi(argv[1]) > 300)
+	if (ft_atoi(argv[1]) > 200)
 	{
-		printf("Too many philosophers");
+		printf("Too many philosophers\n");
 		return (1);
 	}
 	mini_init(info, argv);
@@ -106,6 +107,5 @@ int	init_variables(int argc, char **argv, t_philo **philo, t_info *info)
 	if (*philo == NULL)
 		return (1);
 	init_philo(philo, info);
-	// philo_finish(philo, info);
 	return (0);
 }

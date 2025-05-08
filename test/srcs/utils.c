@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lionelulm <lionelulm@student.42.fr>        +#+  +:+       +#+        */
+/*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:25:01 by lionelulm         #+#    #+#             */
-/*   Updated: 2025/05/07 22:51:09 by lionelulm        ###   ########.fr       */
+/*   Updated: 2025/05/08 15:57:00 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@ int	is_number(char *str)
 	i = 0;
 	if (str == NULL)
 		return (0);
+	while (str[i] == '-')
+		i++;
 	while (str[i])
 	{
 		if (str[i] < '0' || str[i] > '9')
@@ -72,19 +74,19 @@ unsigned long	current_moment(t_philo *philo)
 	return ((tv.tv_sec * 1000 + tv.tv_usec / 1000) - start);
 }
 
-void	philo_finish(t_philo **philo, t_info *info)
-{
-	int i;
+// void	philo_finish(t_philo **philo, t_info *info)
+// {
+// 	int i;
 
-	i = 0;
-	if (*philo == NULL)
-		return ;
-	while (i < info->nb_of_philo - 1)
-	{
-		mutex_philo(&(*philo)[i].lock_fork, KILL);
-		i++;
-	}
-	mutex_philo(&(*info).print, KILL);
-	mutex_philo(&(*info).end, KILL);
-	free(*philo);
-}
+// 	i = 0;
+// 	if (*philo == NULL)
+// 		return ;
+// 	while (i < info->nb_of_philo - 1)
+// 	{
+// 		mutex_philo(&(*philo)[i].lock_fork, KILL);
+// 		i++;
+// 	}
+// 	mutex_philo(&(*info).print, KILL);
+// 	mutex_philo(&(*info).end, KILL);
+// 	free(*philo);
+// }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philosophers.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lionelulm <lionelulm@student.42.fr>        +#+  +:+       +#+        */
+/*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 18:12:55 by lionelulm         #+#    #+#             */
-/*   Updated: 2025/05/07 23:39:46 by lionelulm        ###   ########.fr       */
+/*   Updated: 2025/05/08 15:40:43 by liulm            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ typedef struct s_info
 	pthread_mutex_t	print;
 }		t_info;
 
-typedef struct s_philo t_philo;
+typedef struct s_philo	t_philo;
 
-typedef struct	s_philo
+typedef struct s_philo
 {
 	int				id;
 	int				meals;
@@ -55,33 +55,24 @@ typedef struct	s_philo
 	t_philo			*next_philo;
 }		t_philo;
 
-
-typedef enum s_mutex
-{
-	CREATE,
-	JOIN,
-	INIT,
-	KILL,
-	LOCK,
-	UNLOCK,
-}		t_mutex;
-
 int				ft_atoi(const char *nptr);
 int				is_number(char *str);
-int				init_variables(int argc, char **argv, t_philo **philo, t_info *info);
 int				time_to_die(t_philo *philo);
 int				taking_a_break(t_philo *philo, unsigned long time);
 int				philo_eating(t_philo *philo);
 int				has_philo_eaten(t_philo *philo);
 int				philo_died(t_philo *philo);
 int				sleeping_thinking(t_philo *philo);
-int				dying_pause(t_philo *philo, unsigned long time);
-void			mutex_philo(pthread_mutex_t *mutex, t_mutex action);
-void			pthread_philo(t_philo *philo, t_mutex mutex);
-void			philo_finish(t_philo **philo, t_info *info);
+int				thinking_pause(t_philo *philo, unsigned long time);
+void			pthread_create_philo(t_philo *philo);
+void			mutex_lock_philo(pthread_mutex_t *mutex);
+void			mutex_unlock_philo(pthread_mutex_t *mutex);
+void			mutex_init_philo(pthread_mutex_t *mutex);
 void			philo_action(t_philo *philo, char *action);
 void			*philo_routine(void *arg);
 unsigned long	convert_time_milli(void);
 unsigned long	current_moment(t_philo *philo);
+int				init_variables(int argc, char **argv,
+					t_philo **philo, t_info *info);
 
 #endif
