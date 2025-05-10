@@ -1,20 +1,82 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   utils.c											:+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: liulm <liulm@student.42.fr>				+#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2025/04/28 13:37:00 by liulm			 #+#	#+#			 */
-/*   Updated: 2025/04/28 13:39:27 by liulm			###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 18:25:01 by lionelulm         #+#    #+#             */
+/*   Updated: 2025/05/10 18:19:49 by liulm            ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philosophers.h"
 
-int	ft_atoi(const char *nptr)
+int	is_number(char *str)
 {
-	int	result;
+	int	i;
+
+	i = 0;
+	if (str == NULL)
+		return (0);
+	while (str[i] == '-')
+		i++;
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (0);
+		i++;
+	}
+	return(1);
+}
+
+// int	ft_atoi(const char *nptr)
+// {
+// 	int	result;
+// 	int	sign;
+// 	int	i;
+
+// 	result = 0;
+// 	sign = 1;
+// 	i = 0;
+// 	while ((nptr[i] == 32) || (nptr[i] >= 9 && (nptr[i] <= 13)))
+// 		i++;
+// 	if ((nptr[i] == '-') || (nptr[i] == '+'))
+// 	{
+// 		if (nptr[i] == '-')
+// 			sign = -1;
+// 		i++;
+// 	}
+// 	while (nptr[i] && nptr[i] >= '0' && nptr[i] <= '9')
+// 	{
+// 		result *= 10;
+// 		result += nptr[i] - '0';
+// 		i++;
+// 	}
+// 	return (result * sign);
+// }
+
+unsigned long	convert_time_milli(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+}
+
+unsigned long	current_moment(t_philo *philo)
+{
+	unsigned long	start;
+	struct timeval	tv;
+
+	start = philo->info->start;
+	gettimeofday(&tv, NULL);
+	return ((tv.tv_sec * 1000 + tv.tv_usec / 1000) - start);
+}
+
+long	ft_atol(const char *nptr)
+{
+	long int	result;
 	int	sign;
 	int	i;
 
@@ -37,32 +99,3 @@ int	ft_atoi(const char *nptr)
 	}
 	return (result * sign);
 }
-
-int	ft_isdigit(int c)
-{
-	if (c >= '0' && c <= '9')
-		return (1);
-	return (0);
-}
-
-void	ft_bzero(void *s, size_t n)
-{
-	ft_memset(s, 0, n);
-}
-
-void	*ft_memset(void *s, int c, size_t n)
-{
-	size_t	size;
-	char	*temp;
-
-	size = 0;
-	temp = s;
-	while (size < n)
-	{
-		*temp = c;
-		temp++;
-		size++;
-	}
-	return (s);
-}
-

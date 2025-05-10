@@ -1,49 +1,65 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   time_to_eat.c									  :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: liulm <liulm@student.42.fr>				+#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2025/03/18 14:01:23 by liulm			 #+#	#+#			 */
-/*   Updated: 2025/05/06 16:13:00 by liulm			###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   time_to_eat.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 19:30:59 by lionelulm         #+#    #+#             */
+/*   Updated: 2025/05/08 15:29:03 by liulm            ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philosophers.h"
 
-int	time_to_eat(t_philo *philo, int i, int id)
+int	has_philo_eaten(t_philo *philo)
 {
-	// pthread_mutex_lock(philo->mutex_forks);
-	printf("number of philosophers = %d\n", philo->nb_philo);
-	if (id % 2 == 0)
+	if (philo->info->nb_of_rounds != -1
+		&& (philo->meals == philo->info->nb_of_rounds))
 	{
-		philo->left_fork = &philo->mutex_forks[i];
-		philo->right_fork = &philo->mutex_forks[(i + 1) % philo->nb_philo];
-		printf("1\n");
+		philo->done = 1;
+		return (1);
+	}
+	return (0);
+}
+
+int	philo_eating_odd(t_philo *philo)
+{
+	if (has_philo_eaten(philo))
+		return (1);
+	philo_action(philo, EATING);
+	philo->last_eat = convert_time_milli();
+	if (taking_a_break(philo, philo->info->time_to_eat))
+		return (1);
+	mutex_lock_philo(&philo->next_philo->lock_fork);
+	mutex_lock_philo(&philo->lock_fork);
+	philo->next_philo->fork = 1;
+	philo->fork = 1;
+	mutex_unlock_philo(&philo->lock_fork);
+	mutex_unlock_philo(&philo->next_philo->lock_fork);
+	philo->meals += 1;
+	return (0);
+}
+
+int	philo_eating(t_philo *philo)
+{
+	if (philo->id % 2 == 0)
+	{
+		if (has_philo_eaten(philo))
+			return (1);
+		philo_action(philo, EATING);
+		philo->last_eat = convert_time_milli();
+		if (taking_a_break(philo, philo->info->time_to_eat))
+			return (1);
+		mutex_lock_philo(&philo->lock_fork);
+		mutex_lock_philo(&philo->next_philo->lock_fork);
+		philo->fork = 1;
+		philo->next_philo->fork = 1;
+		mutex_unlock_philo(&philo->next_philo->lock_fork);
+		mutex_unlock_philo(&philo->lock_fork);
+		philo->meals += 1;
+		return (0);
 	}
 	else
-	{
-		philo->left_fork = &philo->mutex_forks[(i + 1) % philo->nb_philo];
-		philo->right_fork = &philo->mutex_forks[i];
-		printf("2\n");
-	}
-	printf("Philosopher %d: Left fork = %p, Right fork = %p\n", id, philo->left_fork, philo->right_fork);
-	pthread_mutex_lock(philo->right_fork);
-	pthread_mutex_lock(philo->left_fork);
-
-	pthread_mutex_lock(&philo->mutex_eat);
-
-	philo->last_eat = convert_time_milli();
-
-	pthread_mutex_unlock(&philo->mutex_eat);
-
-	printf("%ld %d is eating\n", convert_time_milli(), id);
-
-
-	usleep(philo->time_eat * 1000);
-
-	pthread_mutex_unlock(philo->right_fork);
-	pthread_mutex_unlock(philo->left_fork);
-	return (0);
+		return (philo_eating_odd(philo));
 }

@@ -1,75 +1,56 @@
 /* ************************************************************************** */
-/*																			*/
-/*														:::	  ::::::::   */
-/*   main.c											 :+:	  :+:	:+:   */
-/*													+:+ +:+		 +:+	 */
-/*   By: liulm <liulm@student.42.fr>				+#+  +:+	   +#+		*/
-/*												+#+#+#+#+#+   +#+		   */
-/*   Created: 2025/03/18 14:01:38 by liulm			 #+#	#+#			 */
-/*   Updated: 2025/05/06 16:29:11 by liulm			###   ########.fr	   */
-/*																			*/
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: liulm <liulm@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/07 18:11:24 by lionelulm         #+#    #+#             */
+/*   Updated: 2025/05/08 15:43:11 by liulm            ###   ########.fr       */
+/*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/philosophers.h"
 
-// int	main(int argc, char **argv)
-// {
-// 	t_philo		*philo;
-// 	pthread_t	*threads;
-// 	int			i;
-
-// 	if (argc >= 5 && argc <= 6)
-// 	{
-// 		if (initialize_philo(argc, argv, &philo) == 1)
-// 		{
-// 			write(1, "Error: Initialization failed\n", 30);
-// 			return (1);
-// 		}
-// 		while (id-- > 0)
-// 			pthread_create(&threads[id], NULL, philosopher_routine(id, philo), (void *)&id);
-// 		while (id++ < ft_atoi(argv[1]))
-// 			pthread_join(threads[id], NULL);
-// 	}
-// 	else
-// 		write (1, "Usage : ./philosophers nb_phil time_die time_eat time_sleep [nb_of_eat]", 71);
-// 	write(1, "\n", 1);
-// 	return (0);
-// }
-
-int main(int argc, char **argv)
+void	cleanup_philosophers(t_philo *philo, t_info *info)
 {
-	t_philo *philo;
-	pthread_t *threads;
-	int i;
-
-	if (argc < 5 || argc > 6)
-	{
-		printf("Usage: ./philosophers nb_philo time_die time_eat time_sleep [nb_of_eat]\n");
-		return (1);
-	}
-
-	philo = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
-	threads = malloc(sizeof(pthread_t) * ft_atoi(argv[1]));
-	if (!philo || !threads)
-		return (1);
-
-	initialize_philo(argc, argv, &philo);
+	int	i;
 
 	i = 0;
-	while (i < philo[0].nb_philo)
+	while (i < info->nb_of_philo)
 	{
-		pthread_create(&threads[i], NULL, philosopher_routine(i, philo), &philo[i]);
+		pthread_mutex_destroy(&philo[i].lock_fork);
 		i++;
 	}
-
-	i = 0;
-	while (i < philo[0].nb_philo)
-	{
-		pthread_join(threads[i], NULL);
-		i++;
-	}
-
-	free(threads);
+	pthread_mutex_destroy(&info->end);
+	pthread_mutex_destroy(&info->print);
 	free(philo);
+}
+
+int	main(int argc, char **argv)
+{
+	t_philo	*philo;
+	t_info	info;
+	int		i;
+
+	philo = NULL;
+	if (argc >= 5 && argc <= 6)
+	{
+		if (init_variables(argc, argv, &philo, &info) == 1)
+			return (1);
+		i = 0;
+		while (i < info.nb_of_philo)
+		{
+			if (pthread_join(philo[i].thread, NULL) != 0)
+				printf("Join failed for philosopher %d\n", i + 1);
+			i++;
+		}
+		cleanup_philosophers(philo, &info);
+	}
+	else
+	{
+		printf("./philosophers nb_phil die_ms eat_ms sleep_ms [nb_meals]\n");
+		return (1);
+	}
 	return (0);
 }
